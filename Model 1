@@ -116,3 +116,5 @@ nn.lr = 0.01
 nn.dims = [24, 15, 1]
 
 nn.gd(X_train_trans, y_train_trans, iter = 12500)
+pred_train = nn.pred(X_train_trans,y_train_trans.to_numpy())
+pred_test = nn.pred(X_test_trans,y_test_trans.to_numpy())
