@@ -1,0 +1,11 @@
+from tensorflow.keras import layers
+from keras.models import Sequential
+from keras.layers import Dense,LSTM
+from numpy import array
+
+model4 = Sequential()
+model4.add(LSTM(2, input_shape=(1,24)))     # LSTG/GRU/SimpleRNN
+model4.add(Dense(2, activation='softmax'))  # New
+model4.compile(loss="categorical_crossentropy",optimizer="adam",metrics=["accuracy"])
+
+model4.fit(X_train_reshape, y_train_cat, validation_data=(X_test_reshape, y_test_cat), epochs=5)
