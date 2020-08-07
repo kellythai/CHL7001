@@ -1,0 +1,10 @@
+from sklearn.linear_model import LogisticRegression
+from sklearn import metrics
+
+# Logistic Regression
+logreg = LogisticRegression()
+logreg.fit(imputed_X_train,y_train)
+y_pred=logreg.predict(imputed_X_train)
+y_pred2=logreg.predict(imputed_X_test)
+print("Accuracy training:",metrics.accuracy_score(y_train,y_pred)) 
+print("Accuracy testing:",metrics.accuracy_score(y_test, y_pred2))
