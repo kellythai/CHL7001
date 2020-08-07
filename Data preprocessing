@@ -1,0 +1,54 @@
+import pandas as pd
+from sklearn.model_selection import train_test_split
+import numpy as np
+import tensorflow as tf
+from sklearn.preprocessing import LabelEncoder
+
+# Appending 2 xlsx files
+PD_file1 = pd.read_excel(r'/PD_ALL1.xlsx')
+PD_file2 = pd.read_excel(r'/PD_ALL2.xlsx')
+all_df_list = [PD_file1, PD_file2]
+
+appended_df = pd.concat(all_df_list) # for Hoehn Yahr classification
+appended_df2 = pd.concat(all_df_list) # for UPDRS classification
+
+# Converting cm into m
+# For appended_df
+for n in appended_df['Height (meters)']:
+  if n >2:
+    c = n/100
+    appended_df.loc[appended_df['Height (meters)'] > 2, 'Height (meters)'] = c
+# For appended_df2
+for n in appended_df2['Height (meters)']:
+  if n >2:
+    c = n/100
+    appended_df2.loc[appended_df2['Height (meters)'] > 2, 'Height (meters)'] = c
+   
+# Removing useless columns
+# For appended_df: ID, study, group, subjnum, speed_10, speed_01, UPDRS, UPDRSM
+drop_object_columns = ['ID','Study', 'Subjnum', 'Group', 'Speed_10', 'Speed_01 (m/sec)','UPDRS','UPDRSM']
+appended_df.drop(columns=drop_object_columns, inplace=True)
+appended_df.head()
+# For appended_df2: ID, study, group, subjnum, speed_10, speed_01, Hoehn Yahr, UPDRSM
+drop_object_columns = ['ID','Study', 'Subjnum', 'Group', 'Speed_10', 'Speed_01 (m/sec)','HoehnYahr','UPDRSM']
+appended_df2.drop(columns=drop_object_columns, inplace=True)
+appended_df2.head()
+
+# Labelling gender
+# For appended_df:
+appended_df['Male'] = appended_df['Gender'].map({'male':1, 'female':0})
+appended_df[['Gender','Male']]
+appended_df.drop(columns=['Gender'], inplace=True)
+# For appended_df2:
+appended_df2['Male'] = appended_df2['Gender'].map({'male':1, 'female':0})
+appended_df2[['Gender','Male']]
+appended_df2.drop(columns=['Gender'], inplace=True)
+
+# Modifying the target column
+# For appended_df: modifying the Hoehn Yahr score to make it binary
+appended_df['HoehnYahr'].replace(2.0, 1, inplace=True)
+appended_df['HoehnYahr'].replace(2, 1, inplace=True)
+appended_df['HoehnYahr'].replace(2.5, 1, inplace=True)
+appended_df['HoehnYahr'].replace(3, 1, inplace=True)
+# For appended_df2: replace NA with 0
+appended_df2['UPDRS'].fillna(0, inplace=True)
