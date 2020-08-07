@@ -1,0 +1,61 @@
+from sklearn.model_selection import train_test_split
+from keras.utils import to_categorical
+from sklearn.experimental import enable_iterative_imputer
+from sklearn.impute import IterativeImputer
+from sklearn import preprocessing
+
+# Splitting training/testing data:
+# For appended_df:
+X = appended_df[['Age','Height (meters)', 'Weight (kg)', 'TUAG', 'Time (s)', 'VGRF (L1)',
+                'VGRF (L2)', 'VGRF (L3)','VGRF (L4)','VGRF (L5)','VGRF (L6)','VGRF (L7)','VGRF (L8)',
+                'VGRF (R1)','VGRF (R2)','VGRF (R3)','VGRF (R4)','VGRF (R5)','VGRF (R6)','VGRF (R7)',
+                'VGRF (R8)', 'Total force (L)', 'Total force (R)','Male']]
+y = appended_df[['HoehnYahr']]
+X_train, X_test, y_train, y_test = train_test_split(X,y,stratify=y,test_size=0.25)
+
+# For appended_df2:
+X2 = appended_df2[['Age','Height (meters)', 'Weight (kg)', 'TUAG', 'Time (s)', 'VGRF (L1)',
+                'VGRF (L2)', 'VGRF (L3)','VGRF (L4)','VGRF (L5)','VGRF (L6)','VGRF (L7)','VGRF (L8)',
+                'VGRF (R1)','VGRF (R2)','VGRF (R3)','VGRF (R4)','VGRF (R5)','VGRF (R6)','VGRF (R7)',
+                'VGRF (R8)', 'Total force (L)', 'Total force (R)','Male']]
+y2 = appended_df2[['UPDRS']]
+X_train2, X_test2, y_train2, y_test2 = train_test_split(X2,y2,stratify=y2,test_size=0.25)
+
+# Converting y to categorical
+# For appended_df:
+y_train_cat = to_categorical(y_train)
+y_test_cat = to_categorical(y_test)
+# For appended_df2:
+y_train_cat2 = to_categorical(y_train2)
+y_test_cat2 = to_categorical(y_test2)
+
+# Multiple imputation
+# For appended_df:
+imp = IterativeImputer(max_iter=10, verbose=0)
+imp.fit(X_train)
+imputed_X_train = imp.transform(X_train)
+imputed_X_test = imp.transform(X_test)
+# For appended_df2:
+imp = IterativeImputer(max_iter=10, verbose=0)
+imp.fit(X_train2)
+imputed_X_train2 = imp.transform(X_train2)
+imputed_X_test2 = imp.transform(X_test2)
+
+# Data standardization
+# For appended_df:
+X_train_std = preprocessing.scale(imputed_X_train)
+X_test_std = preprocessing.scale(imputed_X_test)
+# For appended_df2:
+X_train_std2 = preprocessing.scale(imputed_X_train2)
+X_test_std2 = preprocessing.scale(imputed_X_test2)
+
+# Reshaping data for LSTM
+# For appended_df:
+X_train_reshape = X_train_std.reshape((1386014,1,24))
+X_test_reshape = X_test_std.reshape((462005,1,24))
+# For appended_df2:
+X_train_reshape2 = X_train_std2.reshape((1386014,1,24))
+X_test_reshape2 = X_test_std2.reshape((462005,1,24))
+
+
+
