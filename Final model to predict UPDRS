@@ -1,0 +1,9 @@
+model_final_UPDRS = Sequential()
+model_final_UPDRS.add(LSTM(40, input_shape=(1,24))) 
+model_final_UPDRS.add(Dense(24, activation='relu'))
+model_final_UPDRS.add(Dense(24, activation='relu'))
+model_final_UPDRS.add(Dense(10, activation='relu'))  
+model_final_UPDRS.add(Dense(71, activation='softmax'))  
+model_final_UPDRS.compile(loss="categorical_crossentropy",optimizer="adam",metrics=["accuracy"])
+
+model_final_UPDRS.fit(X_train_reshape2,y_train_cat2,epochs=5,validation_data=(X_test_reshape2,y_test_cat2))
