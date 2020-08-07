@@ -1,0 +1,6 @@
+model5 = Sequential()
+model5.add(LSTM(24, input_shape=(1,24)))     # LSTG/GRU/SimpleRNN
+model5.add(Dense(2, activation='softmax'))  # New
+model5.compile(loss="categorical_crossentropy",optimizer="adam",metrics=["accuracy"])
+
+model5.fit(X_train_reshape, y_train_cat, validation_data=(X_test_reshape, y_test_cat), epochs=5)
