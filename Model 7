@@ -1,0 +1,8 @@
+from keras.layers import GRU
+
+model7 = Sequential()
+model7.add(GRU(24, input_shape=(1,24)))    
+model7.add(Dense(2, activation='softmax')) 
+model7.compile(loss="categorical_crossentropy",optimizer="adam",metrics=["accuracy"])
+
+model7.fit(X_train_reshape, y_train_cat, validation_data=(X_test_reshape, y_test_cat), epochs=5)
