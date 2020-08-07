@@ -1,0 +1,10 @@
+model3 = Sequential()
+n_col = X_train_std.shape[1]
+model3.add(Dense(10, activation='relu',input_shape=(n_col,)))
+model3.add(Dense(10, activation='relu'))
+model3.add(Dense(10, activation='relu'))
+model3.add(Dense(10, activation='relu'))
+model3.add(Dense(2, activation='softmax'))
+model3.compile(optimizer='adam',loss='categorical_crossentropy',metrics=['accuracy'])
+
+model3.fit(X_train_std,y_train_cat,epochs=5,validation_data=(X_test_std,y_test_cat))
