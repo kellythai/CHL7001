@@ -1,0 +1,6 @@
+model6 = Sequential()
+model6.add(LSTM(40, input_shape=(1,24)))     
+model6.add(Dense(2, activation='softmax')) 
+model6.compile(loss="categorical_crossentropy",optimizer="adam",metrics=["accuracy"])
+
+model6.fit(X_train_reshape, y_train_cat, validation_data=(X_test_reshape, y_test_cat), epochs=5)
